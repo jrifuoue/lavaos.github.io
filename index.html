@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LavaOS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #f0f0f5;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+    a {
+      text-decoration: none;
+      color: #ff4b2b;
+      transition: color 0.3s ease;
+    }
+    a:hover, a:focus {
+      color: #ff6f4b;
+      outline: none;
+    }
+
+    /* Glassmorphism Navbar */
+    nav.navbar {
+      backdrop-filter: blur(15px);
+      background: rgba(20, 20, 20, 0.55);
+      border-radius: 15px;
+      margin: 15px auto;
+      max-width: 96%;
+      position: fixed;
+      top: 10px;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+      box-shadow: 0 8px 32px rgba(255,75,43,0.2);
+    }
+    nav.navbar .navbar-brand {
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: #ff4b2b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    nav.navbar .navbar-brand i {
+      font-size: 2rem;
+      text-shadow: 0 0 5px #ff4b2b;
+    }
+    nav.navbar .nav-link {
+      color: #f0f0f5 !important;
+      font-weight: 600;
+      margin-right: 15px;
+      position: relative;
+    }
+    nav.navbar .nav-link::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background: #ff4b2b;
+      transition: width 0.3s ease;
+      border-radius: 1px;
+    }
+    nav.navbar .nav-link:hover::after,
+    nav.navbar .nav-link:focus::after {
+      width: 100%;
+    }
+    nav.navbar .btn-github {
+      background: linear-gradient(135deg, #24243e, #302b63);
+      border: 2px solid #ff4b2b;
+      color: #ff4b2b;
+      border-radius: 25px;
+      padding: 0.4rem 1.3rem;
+      font-weight: 700;
+      transition: background 0.3s ease, color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    nav.navbar .btn-github:hover, nav.navbar .btn-github:focus {
+      background: #ff4b2b;
+      color: #fff;
+      border-color: #ff6f4b;
+      outline: none;
+    }
+
+    /* Hero Section */
+    header.hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      backdrop-filter: blur(10px);
+      background: rgba(20,20,20,0.3);
+      border-radius: 25px;
+      margin: 80px auto 50px;
+      max-width: 900px;
+      box-shadow: 0 0 40px rgba(255,75,43,0.25);
+      animation: fadeSlideIn 1.2s ease forwards;
+    }
+    header.hero h1 {
+      font-size: 4.8rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 0.3em;
+      color: #ff4b2b;
+      text-shadow: 0 0 10px #ff4b2baa;
+    }
+    header.hero p {
+      font-size: 1.4rem;
+      max-width: 620px;
+      margin-bottom: 2em;
+      opacity: 0.85;
+      font-weight: 600;
+      line-height: 1.5;
+      text-shadow: 0 0 5px #00000066;
+    }
+    header.hero .btn-primary {
+      background: linear-gradient(135deg, #ff4b2b, #ff416c);
+      border: none;
+      padding: 0.7rem 2.2rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 30px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255,75,43,0.5);
+      transition: all 0.35s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 0 8px #ff4b2bcc;
+      backdrop-filter: blur(5px);
+    }
+    header.hero .btn-primary:hover, header.hero .btn-primary:focus {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      box-shadow: 0 8px 25px rgba(255,75,43,0.8);
+      outline: none;
+    }
+
+    /* Section Titles */
+    section {
+      padding: 80px 20px 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    section h2.section-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #ff4b2b;
+      text-align: center;
+      margin-bottom: 50px;
+      text-shadow: 0 0 12px #ff4b2baa;
+      letter-spacing: 1.3px;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 25px;
+      padding: 30px 25px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(255,75,43,0.2);
+      backdrop-filter: blur(12px);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: default;
+      user-select: none;
+    }
+    .feature-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 15px 50px rgba(255,75,43,0.55);
+    }
+    .feature-card i {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+      color: #ff4b2b;
+      text-shadow: 0 0 12px #ff4b2bcc;
+    }
+    .feature-card h4 {
+      font-weight: 800;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      user-select: text;
+    }
+    .feature-card p {
+      font-size: 1.1rem;
+      line-height: 1.4;
+      opacity: 0.85;
+      user-select: text;
+    }
+
+    /* About Section */
+    #about p {
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 600;
+      font-size: 1.15rem;
+      opacity: 0.9;
+      line-height: 1.6;
+      text-align: center;
+      user-select: text;
+    }
+
+    /* Testimonials */
+    .testimonial-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+    .testimonial {
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(255,75,43,0.3);
+      padding: 25px 30px;
+      max-width: 420px;
+      font-style: italic;
+      color: #eee;
+      position: relative;
+      user-select: text;
+      transition: transform 0.3s ease;
+    }
+    .testimonial:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 60px rgba(255,75,43,0.6);
+    }
+    .testimonial::before {
+      content: "“";
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      font-size: 4rem;
+      color: #ff4b2b;
+      opacity: 0.3;
+      font-weight: 900;
+      user-select: none;
+    }
+    .testimonial p {
+      margin: 0;
+    }
+    .testimonial cite {
+      display: block;
+      margin-top: 15px;
+      font-style: normal;
+      font-weight: 700;
+      color: #ff4b2b;
+      user-select: text;
+    }
+    
+    /* Call to Action */
+    #cta {
+      text-align: center;
+      margin-top: 40px;
+    }
+    #cta .btn-cta {
+      background: linear-gradient(135deg, #ff4b2b, #ff416c);
+      border: none;
+      padding: 0.9rem 3rem;
+      font-size: 1.3rem;
+      font-weight: 900;
+      border-radius: 35px;
+      color: #fff;
+      box-shadow: 0 10px 40px rgba(255,75,43,0.6);
+      cursor: pointer;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+      text-shadow: 0 0 12px #ff4b2bcc;
+      backdrop-filter: blur(6px);
+    }
+    #cta .btn-cta:hover, #cta .btn-cta:focus {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      box-shadow: 0 14px 55px rgba(255,75,43,0.85);
+      outline: none;
+    }
+
+    /* Footer */
+    footer.footer {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 20px 15px;
+      color: #999;
+      border-top: 1px solid #333;
+      user-select: none;
+      background: linear-gradient(135deg, #121212, #1b1b1b);
+      box-shadow: inset 0 3px 7px rgba(0,0,0,0.7);
+      margin-top: 70px;
+    }
+    footer.footer a {
+      color: #ff4b2b;
+      font-weight: 700;
+    }
+    footer.footer a:hover {
+      color: #ff6f4b;
+      text-decoration: none;
+    }
+
+    /* Animations */
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      header.hero h1 {
+        font-size: 3.8rem;
+      }
+      section h2.section-title {
+        font-size: 2.3rem;
+      }
+    }
+    @media (max-width: 576px) {
+      header.hero h1 {
+        font-size: 2.8rem;
+      }
+      header.hero p {
+        font-size: 1.1rem;
+      }
+      .feature-card {
+        padding: 25px 18px;
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-terminal"></i> LavaOS
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" 
+        aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
+        <ul class="navbar-nav align-items-center">
+          <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+          <li class="nav-item ms-3">
+            <a href="https://github.com/jrifuoue/LavaOS" class="btn btn-github" aria-label="GitHub Repository">
+              <i class="bi bi-github"></i> GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>LavaOS</h1>
+    <p>The better version of <a href="https://github.com/Dcraftbg/MinOS">MinOS</a> — Fast, Lightweigh, and Open-Source.</p>
+    <a href="#" class="btn-primary">
+      <i class="bi bi-download"></i> Download Now
+    </a>
+  </header>
+
+  <section id="features" aria-label="Features of GAP OS">
+    <h2 class="section-title">Why LavaOS?</h2>
+    <div class="features-grid">
+      <article class="feature-card" tabindex="0" role="region" aria-labelledby="feature-speed">
+        <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+        <h4 id="feature-speed">Blazing Fast Performance</h4>
+        <p>Leveraging MinOS lightweight base, LavaOS delivers lightning speed and top-tier responsiveness on any hardware.</p>
+      </article>
+      <article class="feature-card" tabindex="0" role="region" aria-labelledby="feature-userfriendly">
+        <i class="bi bi-emoji-smile-fill" aria-hidden="true"></i>
+        <h4 id="feature-userfriendly">Power-User Friendly</h4>
+        <p>LavaOS comes out with an custom bash-like shell to make using computer easier th ever, Also LavaOS has an lightweight desktop.</p>
+      </article>
+      <article class="feature-card" tabindex="0" role="region" aria-labelledby="feature-community">
+        <i class="bi bi-people-fill" aria-hidden="true"></i>
+        <h4 id="feature-community">Vibrant Community</h4>
+        <p>Join a thriving, helpful community that shares tips, tools, and custom scripts to enhance your LavaOS experience.</p>
+      </article>
+      <article class="feature-card" tabindex="0" role="region" aria-labelledby="feature-support">
+        <i class="bi bi-headset" aria-hidden="true"></i>
+        <h4 id="feature-support">Enterprise-Grade Support</h4>
+        <p>We offer professional-grade support options and long-term maintenance for users relying on LavaOS.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="about" aria-label="About LavaOS">
+    <h2 class="section-title">About LavaOS</h2>
+    <p>
+      LavaOS it's an free, open source unix-like operating system, forked of MinOS, designed for power users, developers, and enterprises who demand 
+      speed and freedom.
+    </p>
+  </section>
+
+  <section id="cta" aria-label="Call to Action">
+    <a href="#" class="btn-cta">Get Started with LavaOS Today</a>
+  </section>
+
+  <footer class="footer" role="contentinfo">
+    &copy; 2025 LavaOS Team — Crafted with ❤️ by the LavaOS Team
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
